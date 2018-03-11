@@ -5,10 +5,17 @@
  * @description
  */
 import sharp from 'sharp'
+import size from 'image-size'
 import concat from 'concat-stream'
 
-export default function resize(buffer, query = {}) {
-  const { w = 10, h = 10 } = query
+export default async function resize(buffer, query = {}) {
+  let { w, h, s = 1 } = query
+
+  if (!w && !h && s) {
+    const { width, height } = size(buffer)
+    w = s * width
+    h = s * height
+  }
   const resizeStream = sharp(buffer).resize(parseInt(w), parseInt(h))
 
   return new Promise((resolve, reject) => {

@@ -5,6 +5,9 @@
  * @description
  */
 import superagent from 'superagent'
+// import cache from 'superagent-cache'
+
+// cache(superagent, )
 
 export default function request(url, options = {}) {
   let { method = 'get', data, headers } = options

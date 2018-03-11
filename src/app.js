@@ -44,7 +44,9 @@ app.all('/', function (req, res, next) {
 </html>`)
 })
 app.all('/:action/**', async function (req, res, next) {
-  const { action, 0: imgUrl } = req.params
+  let { action, 0: imgUrl } = req.params
+  imgUrl = decodeURIComponent(imgUrl)
+  // console.log(imgUrl)
   const process = actions[action]
   if (!process) {
     next(new Error('illegal action: ' + action + '. supporting ' + Object.keys(actions) + ' currently.'))
