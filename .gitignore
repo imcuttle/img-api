@@ -6,4 +6,5 @@ coverage/
 public/
 .dist/
 .entry/
+/lib/
 **/.DS_Store
