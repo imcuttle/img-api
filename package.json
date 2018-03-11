@@ -1,0 +1,35 @@
+{
+  "name": "img-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/server.js",
+  "scripts": {
+    "test": "jest",
+    "babel": "rimraf lib/ && babel src/ -d lib -D",
+    "dev": "npm run babel -- -w",
+    "prepare": "npm run babel",
+    "start": "nodemon lib/server"
+  },
+  "keywords": [
+    "imcuttle",
+    "img-api"
+  ],
+  "author": "imcuttle",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "image-size": "^0.6.2",
+    "jest": "^22.4.2",
+    "nodemon": "^1.17.1",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "concat-stream": "^1.6.1",
+    "express": "^4.16.2",
+    "sharp": "^0.20.0",
+    "superagent": "^3.8.2"
+  }
+}
