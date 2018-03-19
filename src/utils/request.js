@@ -5,6 +5,7 @@
  * @description
  */
 import superagent from 'superagent'
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 // import cache from 'superagent-cache'
 
 // cache(superagent, )
@@ -27,6 +28,7 @@ export default function request(url, options = {}) {
       request.send(data)
     }
   }
-
+  console.log(process.env.NODE_TLS_REJECT_UNAUTHORIZED)
+  request.then(console.log)
   return request
 }

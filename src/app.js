@@ -7,6 +7,7 @@
 import express from 'express'
 import fs from 'fs'
 import nps from 'path'
+import nurl from 'url'
 import request from './utils/request'
 
 const app = express()
@@ -36,9 +37,9 @@ app.all('/', function (req, res, next) {
 <style></style>
 </head>
 <body>
-<h3>welcome to img api!</h3>
+<h3>Welcome to img api!</h3>
 <div>
-  <a href="/resize">have a try</a>
+  <a href="/resize/http://cdn.leoh.io/images/base_zero/image_198.jpg">Have a try</a>
 </div>
 </body>
 </html>`)
@@ -54,19 +55,24 @@ app.all('/:action/**', async function (req, res, next) {
   }
   const imgReq = request(imgUrl, {
     headers: {
-      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36'
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
+      'host': nurl.parse(imgUrl).host,
+      'accept': '*/*'
     }
   })
-  const imgResponse = await imgReq
-  res.status(imgResponse.status)
-  Object
-    .keys(imgResponse.headers)
-    .forEach(function (name) {
-      res.set(name, imgResponse.headers[name])
-    })
+  let imgResponse
   try {
+    imgResponse = await imgReq
+    res.status(imgResponse.status)
+    Object
+      .keys(imgResponse.headers)
+      .forEach(function (name) {
+        res.set(name, imgResponse.headers[name])
+      })
     res.send(await process(imgResponse.body, req.query))
   } catch (err) {
+    err.req = imgReq
+    err.res = imgResponse
     next(err)
   }
 })
@@ -87,6 +93,8 @@ app.use(function (error, req, res, next) {
 </head>
 <body>
 <h3>${error.message}</h3>
+${error.req ? `<pre>${JSON.stringify(error.req, null, 2)}</pre>` : ''}
+${error.res ? `<pre>${JSON.stringify(error.res, null, 2)}</pre>` : ''}
 <pre>${error.stack}</pre>
 </body>
 </html>`)
